@@ -2,19 +2,12 @@
 This repository implements the Python version of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO) proposed in [1] and already used for a real-life application like Pump Scheduling Optimization in Water Distribution System in [2] and HPO task on Convolutional Neural Networks in [3-4] for Tiny Machine Learning.
 
 ## Packages Requirements
-Execute the following command to retrieve all libraries dependecies for the software:
+The Python version currently supported is 3.7.  
+The requirements to use this library are contained inside of "requirements_SVMCBO.txt".  
+Can be used pip command to install all requirements.
 
-
-## Instructions to use the constrained optimization framework # TODO FOR PYTHON VERSION
-To use this optimization framework you have to define the following parts:
-1) In "testFunctions.R" define the objective function and insert the name of the function defined to variable "f_test" in "main_SVM-CBO.R" file
-2) Insert the number of dimension of the objective function to variable "dim_f" in "main_SVM_CBO.R" file
-3) Insert the values of minimum and maximum dimensions of the objective function in "real_x_min" and "real_x_max" in "main_SVM_CBO.R" file. In case the objective function has different domains values for its dimensions initialise the above variables with vectors of minimum and maximum values.
-4) Decide with boolean variable "opt_min" the orientation of optimization task in "main_SVM_CBO.R" file 
-5) Decide the number of optimization experiment to run with SVM-CBO with variable "nExperiments" in "main_SVM_CBO.R"
-6) Execute the experiments running the "main_SVM_CBO.R" file
-
-At the end of "main_SVM_CBO.R" execution all the experiments results are save in "SVM-CBO_results_experiments.RData" file.
+## Instructions to use the constrained optimization framework
+A script named "ExampleOnTestFunction.py reports an example of how to use SVMCBO framework on two simple test functions.
 
 ## References
 
