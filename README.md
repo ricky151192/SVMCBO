@@ -1,14 +1,11 @@
 # SVM-Constrained Bayesian Optimization 
 This repository implements the Python version of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO) proposed in [1] and already used for a real-life application like Pump Scheduling Optimization in Water Distribution System in [2] and HPO task on Convolutional Neural Networks in [3-4] for Tiny Machine Learning.
 
-# SVMCBO
-Python implementation of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO)
-
 ## Packages Requirements
 Execute the following command to retrieve all libraries dependecies for the software:
 
 
-## Instructions to use the constrained optimization framework
+## Instructions to use the constrained optimization framework # TODO FOR PYTHON VERSION
 To use this optimization framework you have to define the following parts:
 1) In "testFunctions.R" define the objective function and insert the name of the function defined to variable "f_test" in "main_SVM-CBO.R" file
 2) Insert the number of dimension of the objective function to variable "dim_f" in "main_SVM_CBO.R" file
