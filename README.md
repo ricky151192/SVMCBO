@@ -1,5 +1,5 @@
-# SVM-Constrained Bayesian Optimization 
-This repository implements the Python version of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO) proposed in [1] and already used for a real-life application like Pump Scheduling Optimization in Water Distribution System in [2] and HPO task on Convolutional Neural Networks in [3-4] for Tiny Machine Learning.
+# Support Vector Machine - Constrained Bayesian Optimization 
+This repository implements the Python version of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO) proposed in [1] and already used for a real-life applications like Pump Scheduling Optimization in Water Distribution System in [2] and HPO task on Convolutional Neural Networks in [3-4]\* for Tiny Machine Learning.
 
 ## Packages Requirements
 The Python version currently supported is 3.7.  
@@ -18,3 +18,6 @@ A script named "ExampleOnTestFunction.py reports an example of how to use SVMCBO
 [3] Perego, R., Candelieri, A., Archetti, F., & Pau, D. (2020, September). Tuning Deep Neural Network’s Hyperparameters Constrained to Deployability on Tiny Systems. In International Conference on Artificial Neural Networks (pp. 92-103). Springer, Cham. (https://link.springer.com/chapter/10.1007/978-3-030-61616-8_8)
 
 [4] Perego, R., Candelieri A., Archetti F., \& Pau D. AutoTinyML for microcontrollers: dealing with black-box deployability. IEEE Transactions on Neural Networks and Learning Systems (2020). (Under review)
+
+
+\* A modified version of SVM-CBO is implemented to support HPO task on Keras Convolutional Neural Networks.
