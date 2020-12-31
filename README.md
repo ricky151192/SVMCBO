@@ -25,6 +25,6 @@ At the end of "main_SVM_CBO.R" execution all the experiments results are save in
 
 [2] Candelieri, A., Galuzzi, B., Giordani, I., Perego, R., & Archetti, F. (2019, May). Optimizing partially defined black-box functions under unknown constraints via Sequential Model Based Optimization: an application to Pump Scheduling Optimization in Water Distribution Networks. In International Conference on Learning and Intelligent Optimization (pp. 77-93). Springer, Cham. (https://link.springer.com/chapter/10.1007/978-3-030-38629-0_7)
 
-[3] Perego, R., Candelieri, A., Archetti, F., & Pau, D. (2020, September). Tuning Deep Neural Network’s Hyperparameters Constrained to Deployability on Tiny Systems. In International Conference on Artificial Neural Networks (pp. 92-103). Springer, Cham.
+[3] Perego, R., Candelieri, A., Archetti, F., & Pau, D. (2020, September). Tuning Deep Neural Network’s Hyperparameters Constrained to Deployability on Tiny Systems. In International Conference on Artificial Neural Networks (pp. 92-103). Springer, Cham. (https://link.springer.com/chapter/10.1007/978-3-030-61616-8_8)
 
 [4] Perego, R., Candelieri A., Archetti F., \& Pau D. AutoTinyML for microcontrollers: dealing with black-box deployability. IEEE Transactions on Neural Networks and Learning Systems (2020). (Under review)
