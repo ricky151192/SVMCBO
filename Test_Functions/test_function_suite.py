@@ -293,6 +293,11 @@ def alpine2_c_disc(x, disc_factor = 30):
         return np.nan
 
 # To use this test function you have to install the Emmental-GKLS generator
+# The generator can be used only if asked to the authors
+# For the authors please reference to this work:
+# Sergeyev, Y. D., Kvasov, D. E., & Mukhametzhanov, M. S. (2017, June). Emmental-type GKLS-based multiextremal smooth test problems with non-linear constraints. In International Conference on Learning and Intelligent Optimization (pp. 383-388). Springer, Cham. 
+# Link to the paper: https://link.springer.com/chapter/10.1007/978-3-319-69404-7_35
+
 def CGen_function(x, seed=1, hardness='simple'):
 
     maxx = np.repeat(1, len(x))
