@@ -1,7 +1,7 @@
 
 import matplotlib.pyplot as plt
 from SVMCBO_code.SVMCBO import SVMCBO
-from test_function_suite import *
+from Test_Functions.test_function_suite import *
 
 ## Example optimization Mishra Bird test function ############################################
 test_f = mishra_bird_c
