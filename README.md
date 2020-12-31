@@ -1,5 +1,5 @@
 # SVM-Constrained Bayesian Optimization 
-This repository implements the Support Vector Machine Constrained Bayesian Optimization (SVM-CBO) proposed in [1] and already used for a real-life application like Pump Scheduling Optimization in Water Distribution System in [2] and HPO task on Convolutional Neural Networks in [3-4] for Tiny Machine Learning.
+This repository implements the Python version of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO) proposed in [1] and already used for a real-life application like Pump Scheduling Optimization in Water Distribution System in [2] and HPO task on Convolutional Neural Networks in [3-4] for Tiny Machine Learning.
 
 # SVMCBO
 Python implementation of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO)
