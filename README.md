@@ -17,7 +17,6 @@ A script named "ExampleOnTestFunction.py reports an example of how to use SVMCBO
 
 [3] Perego, R., Candelieri, A., Archetti, F., & Pau, D. (2020, September). Tuning Deep Neural Network’s Hyperparameters Constrained to Deployability on Tiny Systems. In International Conference on Artificial Neural Networks (pp. 92-103). Springer, Cham. (https://link.springer.com/chapter/10.1007/978-3-030-61616-8_8)
 
-[4] Perego, R., Candelieri A., Archetti F., \& Pau D. AutoTinyML for microcontrollers: dealing with black-box deployability. IEEE Transactions on Neural Networks and Learning Systems (2020). (Under review)
-
+[4] Perego, R., Candelieri A., Archetti F., \& Pau D. AutoTinyML for microcontrollers: dealing with black-box deployability. Expert Systems With Applications (2021). (Under review)
 
 \* A modified version of SVM-CBO is implemented to support HPO task on Keras Convolutional Neural Networks.
