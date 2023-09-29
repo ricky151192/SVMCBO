@@ -1,6 +1,11 @@
 # Support Vector Machine - Constrained Bayesian Optimization 
 This repository implements the Python version of Support Vector Machine - Constrained Bayesian Optimization (SVM-CBO) proposed in [1] and already used for a real-life applications like Pump Scheduling Optimization in Water Distribution System in [2] and HPO task on Convolutional Neural Networks in [3-4]\* for Tiny Machine Learning.
 
+## Locally-modified versions
+`clean`: clean-up code, installation, packaging
+`one-the-fly`: update SVM classifier for feasible domain and GP model for optimization at runtime
+`gradient-informed`: build gradient-informed GP model for optimization
+
 ## Packages Requirements
 The Python version currently supported is 3.7.  
 The requirements to use this library are contained inside of "requirements_SVMCBO.txt".  
