@@ -2,6 +2,7 @@ import numpy as np
 from pyDOE2 import lhs
 from joblib import Parallel, delayed
 
+
 def focus_search(f, args, n_restart = 3, n_focus = 5):
     bounds = np.array([[0, 1], [0, 1]])
     cand_points = []
@@ -13,7 +14,9 @@ def focus_search(f, args, n_restart = 3, n_focus = 5):
 
         for iter_n in range(0,n_focus):
             x = lhs(len(new_bounds), 5000)
-            y = Parallel(n_jobs=16)(delayed(f)([v], args) for v in x)  # evaluate points in parallel
+            ## don't use har-coded parallelism, TODO!
+#            y = Parallel(n_jobs=16)(delayed(f)([v], args) for v in x)  # evaluate points in parallel
+            y = f(x, args)
             x_star = x[np.argmin(y)]
             y_star = np.min(y)
             optimal_point = optimal_point + [x_star]
@@ -21,12 +24,10 @@ def focus_search(f, args, n_restart = 3, n_focus = 5):
             new_bounds = []
 
             for i in range(len(bounds)):
-
                 l_xi = np.min(x[:, i])
                 u_xi = np.max(x[:, i])
                 new_l_xi = np.max([l_xi, x_star[i] - 0.25 * (u_xi - l_xi)])
                 new_u_xi = np.min([u_xi, x_star[i] + 0.25 * (u_xi - l_xi)])
-
                 new_bounds = new_bounds + [[new_l_xi, new_u_xi]]
 
         optimal_value = np.array(optimal_value)
@@ -42,7 +43,8 @@ def focus_search(f, args, n_restart = 3, n_focus = 5):
 
 def focus_search_parallel(f, args, n_restart = 3, n_focus = 5):
     bounds = args["bounds"]
-    results = Parallel(n_jobs=16)(delayed(focusing)(f, bounds, n_focus, args) for i in np.arange(0,n_restart))
+    ##TODO: avoid hard-coded parallelism
+    results = Parallel(n_jobs=6)(delayed(focusing)(f, bounds, n_focus, args) for i in np.arange(0,n_restart))
     cand_xs = np.array([r[0] for r in results])
     cand_acqs = np.array([r[1] for r in results])
     classifier = args["classifier"]
@@ -75,15 +77,13 @@ def focusing(f, b, n_iter, args):
     optimal_point = optimal_value = []
     new_bounds = b
     for iter_n in range(0, n_iter):
-
         x = lhs(len(new_bounds), 10000)
         classifier = args["classifier"]
         labels_cand = classifier.predict(x)
-
         if len(np.where(labels_cand == 1)[0]) == 10000:
             print(len(np.where(labels_cand == 1)[0]))
             return x[-1], np.inf
-        #
+        
         x = x[np.where(labels_cand == 0)]
         y = f(x, args)# call acquisition function
         x_star = x[np.argmin(y)]
@@ -91,18 +91,14 @@ def focusing(f, b, n_iter, args):
         optimal_point = optimal_point + [x_star]
         optimal_value = optimal_value + [y_star]
         new_bounds = []
-
         for i in range(len(b)):
             l_xi = np.min(x[:, i])
             u_xi = np.max(x[:, i])
             new_l_xi = np.max([l_xi, x_star[i] - 0.25 * (u_xi - l_xi)])
             new_u_xi = np.min([u_xi, x_star[i] + 0.25 * (u_xi - l_xi)])
-
             new_bounds = new_bounds + [[new_l_xi, new_u_xi]]
         #print("Shrinked Bounds: {}".format(new_bounds))
     optimal_value = y_star
     optimal_point = x_star
     return optimal_point, optimal_value
 
-#f = rosenbrock
-#next_x= focus_search_parallel(f, args=None, n_restart=3, n_focus=5)

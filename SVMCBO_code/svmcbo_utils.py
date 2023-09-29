@@ -75,7 +75,8 @@ def nextPointPhase1(sampledPoints, svm, gamma, dimensions_test):
     #
     # print(ix)
 
-    results = Parallel(16)(
+    ##TODO: avoid hard-coded parallelism
+    results = Parallel(6)(
         delayed(spy.optimize.minimize)(
             fun=phase1AcquisitionFunction,
             args=additional,

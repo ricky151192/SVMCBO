@@ -3,7 +3,6 @@ This repository implements the Python version of Support Vector Machine - Constr
 
 ## Locally-modified versions
 `clean`: clean-up code, installation, packaging
-`one-the-fly`: update SVM classifier for feasible domain and GP model for optimization at runtime
 `gradient-informed`: build gradient-informed GP model for optimization
 
 ## Packages Requirements

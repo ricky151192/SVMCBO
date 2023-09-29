@@ -13,22 +13,16 @@ class SVMCBO():
                  iter_phase1=60, iter_phase2=30,
                  surrogate="GP",
                  noise=None, gamma=0.1, classifier=SVC, seed=42):
-        self.noise = noise
-        self.classifier = classifier
-        self.gamma = gamma
-        self.gamma_svm = "scale"
-        self.x_tot = []
-        self.y_tot = []
-        self.x_feasible = []
-        self.y_feasible = []
-        self.labels = []
-        self.n_init = n_init
+        self.noise, self.classifier = noise, classifier
+        self.gamma, self.gamma_svm = gamma, "scale"
+        self.x_tot, self.y_tot = [], []
+        self.x_feasible, self.y_feasible = [], []
+        self.labels, self.n_init = [], n_init
         self.iter_phase1 = iter_phase1
         self.iter_phase2 = iter_phase2
         self.surrogate_type = surrogate
         self.surrogates = list()
-        self.bounds = bounds
-        self.f = f
+        self.bounds, self.f = bounds, f
         self.classifiers = list()
         self.score_svm = list()
         self.seed = seed
@@ -39,7 +33,7 @@ class SVMCBO():
         self.y_feasible = list()
         i = 0
         while i < x.shape[0]:
-            print("*** Iterazione #", i)
+            print("*** Iteration ", i)
             print("==> Points to evaluate: ", x[i,])
             function_evaluation = self.f(x[i,])
 
@@ -54,7 +48,7 @@ class SVMCBO():
 
             self.y_tot = self.y_tot + [function_evaluation]
             i = i + 1
-            print(" --> Numero di punti feasible:", len(self.y_feasible))
+            print(" --> Number of feasible points:", len(self.y_feasible))
 
         self.x_tot = x.tolist()
 
@@ -75,7 +69,7 @@ class SVMCBO():
         print("Start phase 1!!!")
         for i in np.arange(0, self.iter_phase1):
             print('*' * 70)
-            print("Iterazione", i, "in fase 1... (punti feasible:", len(self.y_feasible), ")")
+            print("Iteration", i, "in phase 1... (feasible points:", len(self.y_feasible), ")")
             print("[Current best value: ", np.min(self.y_feasible),"]")
             print("Computing the new point...")
             x_new = nextPointPhase1(sampledPoints=self.x_tot, svm=self.classifiers[i], gamma=np.var(self.x_tot),
@@ -112,10 +106,9 @@ class SVMCBO():
         warnings.filterwarnings("ignore")
         for iter_bo in np.arange(0, self.iter_phase2):
             print('*' * 70)
-            print("> Iterazione {} in fase 2... (punti feasible:{})".format(iter_bo, len(self.y_feasible)))
+            print("> Iteration {} in phase 2... (feasible points: {})".format(iter_bo, len(self.y_feasible)))
             print("[Current best value: ", np.min(self.y_feasible),"]")
-            x_ = self.x_feasible
-            y_ = self.y_feasible
+            x_, y_ = self.x_feasible, self.y_feasible
 
             svm_model = self.classifiers[-1]
             if self.surrogate_type == "GP":
@@ -142,7 +135,7 @@ class SVMCBO():
 
             ### Update surrogate model in case unfeasible point sampled!
             if np.isnan(value):
-                print("**** Retraining the boundaries! ***")
+                print("**** Retraining bounds! ***")
                 self.gamma = 1 / (2 * np.var(self.x_tot))
                 svm = estimateFeasibleRegion(self.x_tot, self.labels,self.gamma)
                 score_svm = svm.score(self.x_tot, self.labels)
