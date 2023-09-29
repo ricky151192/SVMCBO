@@ -26,7 +26,7 @@ def _return_std(X, trees, predictions, min_variance):
     -------
     * `std` [array-like, shape=(n_samples,)]:
         Standard deviation of `y` at `X`. If criterion
-        is set to "mse", then `std[i] ~= std(y | X[i])`.
+        is set to "friedman_mse", then `std[i] ~= std(y | X[i])`.
     """
     # This derives std(y | x) as described in 4.3.2 of arXiv:1211.0906
     std = np.zeros(len(X))
@@ -59,11 +59,12 @@ class RandomForestRegressor(_sk_RandomForestRegressor):
     n_estimators : integer, optional (default=10)
         The number of trees in the forest.
 
-    criterion : string, optional (default="mse")
+    criterion : string, optional (default="friedman_mse")
         The function to measure the quality of a split. Supported criteria
-        are "mse" for the mean squared error, which is equal to variance
-        reduction as feature selection criterion, and "mae" for the mean
-        absolute error.
+        are "squared_error" for the mean squared error, which is equal to variance
+        reduction as feature selection criterion, "absolute_error" for the mean
+        absolute error, and "friedman_mse" for mean squared error with improved
+        scoring according to Friedman.
 
     max_features : int, float, string or None, optional (default="auto")
         The number of features to consider when looking for the best split:
@@ -183,7 +184,7 @@ class RandomForestRegressor(_sk_RandomForestRegressor):
     ----------
     .. [1] L. Breiman, "Random Forests", Machine Learning, 45(1), 5-32, 2001.
     """
-    def __init__(self, n_estimators=10, criterion='mse', max_depth=None,
+    def __init__(self, n_estimators=10, criterion='friedman_mse', max_depth=None,
                  min_samples_split=2, min_samples_leaf=1,
                  min_weight_fraction_leaf=0.0, max_features='auto',
                  max_leaf_nodes=None, bootstrap=True, oob_score=False,
@@ -215,19 +216,19 @@ class RandomForestRegressor(_sk_RandomForestRegressor):
         Returns
         -------
         predictions : array-like of shape = (n_samples,)
-            Predicted values for X. If criterion is set to "mse",
+            Predicted values for X. If criterion is set to "friedman_mse",
             then `predictions[i] ~= mean(y | X[i])`.
 
         std : array-like of shape=(n_samples,)
             Standard deviation of `y` at `X`. If criterion
-            is set to "mse", then `std[i] ~= std(y | X[i])`.
+            is set to "friedman_mse", then `std[i] ~= std(y | X[i])`.
         """
         mean = super(RandomForestRegressor, self).predict(X)
 
         if return_std:
-            if self.criterion != "mse":
+            if self.criterion != "friedman_mse":
                 raise ValueError(
-                    "Expected impurity to be 'mse', got %s instead"
+                    "Expected impurity to be 'friedman_mse', got %s instead"
                     % self.criterion)
             std = _return_std(X, self.estimators_, mean, self.min_variance)
             return mean, std
@@ -255,14 +256,17 @@ class ExtraTreesRegressor(_sk_ExtraTreesRegressor):
            The default value of ``n_estimators`` changed from 10 to 100
            in 0.22.
 
-    criterion : {"mse", "mae"}, default="mse"
+    criterion : {"friedman_mse", "squared_error", "absolute_error"}, default="friedman_mse"
         The function to measure the quality of a split. Supported criteria
-        are "mse" for the mean squared error, which is equal to variance
-        reduction as feature selection criterion, and "mae" for the mean
-        absolute error.
+        are "squared_error" for the mean squared error, which is equal to variance
+        reduction as feature selection criterion, "absolute_error" for the mean
+        absolute error, and "friedman_mse" for mean squared error with improved
+        scoring according to Friedman.
 
         .. versionadded:: 0.18
            Mean Absolute Error (MAE) criterion.
+        .. versionadded:: 0.22.1
+           Friedman mean squared error criterion.
 
     max_depth : int, default=None
         The maximum depth of the tree. If None, then nodes are expanded until
@@ -453,7 +457,7 @@ class ExtraTreesRegressor(_sk_ExtraTreesRegressor):
     .. [1] P. Geurts, D. Ernst., and L. Wehenkel, "Extremely randomized trees",
            Machine Learning, 63(1), 3-42, 2006.
     """
-    def __init__(self, n_estimators=10, criterion='mse', max_depth=None,
+    def __init__(self, n_estimators=10, criterion='friedman_mse', max_depth=None,
                  min_samples_split=2, min_samples_leaf=1,
                  min_weight_fraction_leaf=0.0, max_features='auto',
                  max_leaf_nodes=None, min_impurity_decrease=0.,
@@ -487,19 +491,19 @@ class ExtraTreesRegressor(_sk_ExtraTreesRegressor):
         Returns
         -------
         predictions : array-like of shape = (n_samples,)
-            Predicted values for X. If criterion is set to "mse",
+            Predicted values for X. If criterion is set to "friedman_mse",
             then `predictions[i] ~= mean(y | X[i])`.
 
         std : array-like of shape=(n_samples,)
             Standard deviation of `y` at `X`. If criterion
-            is set to "mse", then `std[i] ~= std(y | X[i])`.
+            is set to "friedman_mse", then `std[i] ~= std(y | X[i])`.
         """
         mean = super(ExtraTreesRegressor, self).predict(X)
 
         if return_std:
-            if self.criterion != "mse":
+            if self.criterion != "friedman_mse":
                 raise ValueError(
-                    "Expected impurity to be 'mse', got %s instead"
+                    "Expected impurity to be 'friedman_mse', got %s instead"
                     % self.criterion)
             std = _return_std(X, self.estimators_, mean, self.min_variance)
             return mean, std

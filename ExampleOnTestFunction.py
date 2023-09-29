@@ -15,7 +15,17 @@ exp_svmcbo.phase2()
 res = exp_svmcbo.generate_result()
 print(f"Optimum point: {res.get('x')}")
 print(f"Optimal value: {res.get('fun')}")
-gap_metric_svmcbo = exp_svmcbo.gap_metric(optimum_value=optimum_for_gap)
+gap_metric_svmcbo_GPR = exp_svmcbo.gap_metric(optimum_value=optimum_for_gap)
+
+## Experiment with SVM-CBO Matern-3/2 kernel
+exp_svmcbo = SVMCBO(f=test_f, surrogate="GP", GP_kernel="Matern", kernel_kwargs={'nu':5/2})
+exp_svmcbo.init_opt()
+exp_svmcbo.phase1()
+exp_svmcbo.phase2()
+res = exp_svmcbo.generate_result()
+print(f"Optimum point: {res.get('x')}")
+print(f"Optimal value: {res.get('fun')}")
+gap_metric_svmcbo_GPM = exp_svmcbo.gap_metric(optimum_value=optimum_for_gap)
 
 ## Experiment with SVM-CBO_RF
 exp_svmcbo_rf = SVMCBO(f=test_f, surrogate="RF")
@@ -29,7 +39,8 @@ gap_metric_svmcbo_rf = exp_svmcbo_rf.gap_metric(optimum_value=optimum_for_gap)
 
 ## Comparison gap metric between SVMCBO and SVMCBO_RF
 
-plt.plot(gap_metric_svmcbo, label="SVM-CBO")
+plt.plot(gap_metric_svmcbo_GPR, label="SVM-CBO (RBF kernel)")
+plt.plot(gap_metric_svmcbo_GPM, label="SVM-CBO (Matern-5/2 kernel)")
 plt.plot(gap_metric_svmcbo_rf, label="SVM-CBO_RF")
 plt.ylim(0.0,1.1)
 plt.ylabel("Gap Metric")

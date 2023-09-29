@@ -1,17 +1,17 @@
-
 from sklearn.svm import SVC
+from sklearn.gaussian_process import kernels
 from .my_gp import *
 from .my_rf import *
-from sklearn.gaussian_process.kernels import RBF
 from .svmcbo_utils import *
 from .focus_search import *
 from pyDOE2 import lhs
 import numpy as np
 
+
 class SVMCBO():
     def __init__(self, f, bounds=[[0, 1], [0, 1]], n_init=10,
                  iter_phase1=60, iter_phase2=30,
-                 surrogate="GP",
+                 surrogate="GP", GP_kernel="RBF", kernel_kwargs={},
                  noise=None, gamma=0.1, classifier=SVC, seed=42):
         self.noise, self.classifier = noise, classifier
         self.gamma, self.gamma_svm = gamma, "scale"
@@ -26,6 +26,11 @@ class SVMCBO():
         self.classifiers = list()
         self.score_svm = list()
         self.seed = seed
+        if surrogate == "GP":
+            try:
+                self.kernel = eval("kernels."+GP_kernel+"(**kernel_kwargs)")
+            except:
+                raise ValueError("`GP_kernel` has to be one of `sklearn.gaussian_process.kernels`!")
 
     def init_opt(self):
         x = lhs(len(self.bounds), self.n_init, random_state=self.seed)
@@ -103,6 +108,9 @@ class SVMCBO():
         self.x_feasible = np.array(self.x_tot)[np.where(self.labels == 0)[0],].tolist()
 
     def phase2(self):
+        """
+        Run Bayesian optimization with on-the-fly updates of SVM estimator for feasible region.
+        """
         warnings.filterwarnings("ignore")
         for iter_bo in np.arange(0, self.iter_phase2):
             print('*' * 70)
@@ -112,7 +120,7 @@ class SVMCBO():
 
             svm_model = self.classifiers[-1]
             if self.surrogate_type == "GP":
-                surrogate_model = GaussianProcessRegressor(RBF())
+                surrogate_model = GaussianProcessRegressor(self.kernel)
             elif self.surrogate_type == "RF":
                 surrogate_model = RandomForestRegressor()
             else:
