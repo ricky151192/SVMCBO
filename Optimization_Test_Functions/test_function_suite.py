@@ -10,7 +10,7 @@ def rosenbrock(x):
 
     x1 = x[0]
     x2 = x[1]
-    return((x1-1)**2) + 100 * (x2-x1**2)**2
+    return((1-x1)**2) + 100 * (x2-x1**2)**2
 
 def rosenbrock_fun_c_1(x):
     maxx = np.array([1.5, 2.5])
@@ -19,8 +19,8 @@ def rosenbrock_fun_c_1(x):
 
     x1 = x[0]
     x2 = x[1]
-    if(x1**2+x2**2)<= 2:
-        return((x1-1)**2) + 100 * (x2-x1**2)**2
+    if ( x1**2 + x2**2 ) <= 2.:
+        return((1-x1)**2) + 100 * (x2-x1**2)**2
     else:
         return np.nan
 
@@ -31,8 +31,9 @@ def rosenbrock_fun_c_2(x):
 
     x1 = x[0]
     x2 = x[1]
-    if ((x1-1)**3 - x2 + 1 <= 0) and (x1 + x2 - 2 <=0):
-        return ((x1-1)**2) + 100 * (x2-x1**2)**2
+    c = ((x1 - 1)**3 - x2 <= -1.) and (x1 + x2 <= 2.)
+    if c:
+        return ((1-x1)**2) + 100 * (x2-x1**2)**2
     else:
         return np.nan
 
@@ -368,3 +369,65 @@ def CGen_function_disc(x, seed=1, hardness='simple', disc_factor=30):
     else:
         y = float(str(line[-1]).split(":")[-1].split("\\")[0])
     return y
+
+
+def gomez_levi(x):
+    maxx = np.array([ 1.0,  1.0])
+    minn = np.array([-1.0, -1.0])
+    x = x * (maxx-minn) + minn
+    x1 = x[0]
+    x2 = x[1]
+    return 4*x1**2 - 2.1*x1**4 + x1**6 / 3 + x1*x2 - 4*x2**2 + 4*x2**4 + 1.031628453
+
+def gomez_levi_c(x):
+    maxx = np.array([ 1.0,  1.0])
+    minn = np.array([-1.0, -1.0])
+    x = x * (maxx-minn) + minn
+    x1 = x[0]
+    x2 = x[1]
+    c = 2 * np.sin(2*np.pi*x2)**2 - np.sin(4*np.pi*x1) <= 1.5
+    if c:
+        return 4*x1**2 - 2.1*x1**4 + x1**6 / 3 + x1*x2 - 4*x2**2 + 4*x2**4 + 1.031628453
+    else:
+        return np.nan
+
+
+search_domain = {
+    'rosenbrock':        np.array([[-1.5, 1.5], [-0.5, 2.5]]),
+    'rosenbrock_fun_c_1':np.array([[-1.5, 1.5], [-0.5, 2.5]]),
+    'rosenbrock_fun_c_2':np.array([[-1.5, 1.5], [-0.5, 2.5]]),
+    'michalewicz':       np.array([[0., np.pi], [0., np.pi]]),
+    'michalewicz_c':     np.array([[0., np.pi], [0., np.pi]]),
+    'mishra_bird':       np.array([[-10.,  0.], [-6.5,  0.]]),
+    'mishra_bird_c':     np.array([[-10.,  0.], [-6.5,  0.]]),
+    'mishra_bird_c_disc':np.array([[-10.,  0.], [-6.5,  0.]]),
+    'alpine2':           np.array([[  0., 10.], [  0., 10.]]),
+    'alpine2_c':         np.array([[  0., 10.], [  0., 10.]]),
+    'alpine2_c_disc':    np.array([[  0., 10.], [  0., 10.]]),
+    'gomez_levi':        np.array([[ -1.,  1.], [ -1.,  1.]]),
+    'gomez_levi_c':      np.array([[ -1.,  1.], [ -1.,  1.]]),
+                }
+def get_bounds(func_name):
+    return search_domain.get(func_name, [[0.,1.],[0.,1.]])
+
+def scale_to_domain(x, func_name):
+    bounds = get_bounds(func_name)
+    return x * (bounds[:,1] - bounds[:,0]) + bounds[:,0]
+
+def scale_from_domain(x, func_name):
+    bounds = get_bounds(func_name)
+    return (x - bounds[:,0]) / (bounds[:,1] - bounds[:,0])
+
+minimum = {
+    'rosenbrock':np.array([1.,1.]),
+    'rosenbrock_fun_c_1':np.array([1.,1.]),
+    'rosenbrock_fun_c_2':np.array([1.,1.]),
+    'mishra_bird':np.array([-3.1302468,-1.5821422]),
+    'mishra_bird_c':np.array([-3.1302468,-1.5821422]),
+    'mishra_bird_c_disc':np.array([-3.1302468,-1.5821422]),
+    'gomez_levi':np.array([0.08984201, -0.7126564]),
+    'gomez_levi_c':np.array([0.08984201, -0.7126564]),
+          }
+
+def get_minimum(func_name):
+    return minimum.get(func_name)

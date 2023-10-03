@@ -59,7 +59,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=["numpy>=1.19.2", "pandas>=1.1.2", "Pillow>=7.2.0",
-                      "pyDOE2>=1.3.0", "scikit-learn>=0.23.2", 
-                      "scikit-optimize>=0.8.1", "scipy>=1.5.2"],
+                      "scikit-learn>=0.23.2", "scikit-optimize>=0.8.1",
+                      "scipy>=1.5.2"],
     include_package_data=True,
 )

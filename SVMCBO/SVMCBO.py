@@ -1,17 +1,21 @@
+import numpy as np
 from sklearn.svm import SVC
 from sklearn.gaussian_process import kernels
+from skopt.sampler import Sobol, Lhs
 from .my_gp import *
 from .my_rf import *
 from .svmcbo_utils import *
 from .focus_search import *
-from pyDOE2 import lhs
-import numpy as np
 
+
+sampler_settings = {"lhs"   : {'criterion':'maximin', 'iterations':100},
+                    "sobol" : {}}
 
 class SVMCBO():
     def __init__(self, f, bounds=[[0, 1], [0, 1]], n_init=10,
                  iter_phase1=60, iter_phase2=30,
                  surrogate="GP", GP_kernel="RBF", kernel_kwargs={},
+                 sampler='lhs', sampler_kwargs={},
                  noise=None, gamma=0.1, classifier=SVC, seed=42):
         self.noise, self.classifier = noise, classifier
         self.gamma, self.gamma_svm = gamma, "scale"
@@ -22,10 +26,15 @@ class SVMCBO():
         self.iter_phase2 = iter_phase2
         self.surrogate_type = surrogate
         self.surrogates = list()
-        self.bounds, self.f = bounds, f
+        self.bounds, self.f = np.array(bounds, dtype=float), f
         self.classifiers = list()
         self.score_svm = list()
         self.seed = seed
+        sampler = sampler.lower()
+        if sampler not in ["sobol", "lhs"]: raise ValueError("Unknown sampler '"+sampler+"'!")
+        sampler_opt = sampler_settings[sampler]
+        sampler_opt.update(sampler_kwargs)
+        self.sampler = eval(sampler.capitalize() + "(**sampler_opt)")
         if surrogate == "GP":
             try:
                 self.kernel = eval("kernels."+GP_kernel+"(**kernel_kwargs)")
@@ -33,7 +42,7 @@ class SVMCBO():
                 raise ValueError("`GP_kernel` has to be one of `sklearn.gaussian_process.kernels`!")
 
     def init_opt(self):
-        x = lhs(len(self.bounds), self.n_init, random_state=self.seed)
+        x = np.array(self.sampler.generate(self.bounds, self.n_init, random_state=self.seed))
         self.labels = np.zeros((x.shape[0],))
         self.y_feasible = list()
         i = 0
